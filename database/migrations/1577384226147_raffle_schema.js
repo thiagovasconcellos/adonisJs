@@ -7,7 +7,7 @@ class RaffleSchema extends Schema {
     this.create('raffles', (table) => {
       table.increments()
       table
-        .integer('owner_id')
+        .integer('user_id')
         .unsigned()
         .references('id')
         .inTable('users')
@@ -24,11 +24,7 @@ class RaffleSchema extends Schema {
       table.string('title_reduced', 50).notNullable()
       table.string('description').notNullable()
       table.float('value').notNullable()
-      table.enu('numbers', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], {
-        enumName: 'text',
-        existingType: true,
-        schemaName: 'public'
-      })
+      table.integer('quantity').notNullable()
       table.timestamps()
     })
   }

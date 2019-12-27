@@ -1,92 +1,44 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const LockedNumber = use('App/Models/RaffleLockedNumber');
 
-/**
- * Resourceful controller for interacting with rafflelockednumbers
- */
 class RaffleLockedNumberController {
-  /**
-   * Show a list of all rafflelockednumbers.
-   * GET rafflelockednumbers
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+
+  async index ({ params, request, response, view }) {
+    const lockedNumbers = LockedNumber.query()
+      .where('raffle_id', params.raffles_id)
+      .with('user')
+      .fetch()
+
+    return lockedNumbers
   }
 
-  /**
-   * Render a form to be used for creating a new rafflelockednumber.
-   * GET rafflelockednumbers/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store ({ auth, params, request }) {
+    const data = request.only('number_locked')
+
+    const lockNumber = await LockedNumber.create({
+      ...data,
+      raffle_id: params.raffles_id,
+      user_id: auth.user.id
+    })
+
+    return lockNumber
   }
 
-  /**
-   * Create/save a new rafflelockednumber.
-   * POST rafflelockednumbers
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async show ({ params }) {
+    const lockedNumber = LockedNumber.findOrFail(params.id)
+
+    return lockedNumber
   }
 
-  /**
-   * Display a single rafflelockednumber.
-   * GET rafflelockednumbers/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update ({ params, request }) {
+
   }
 
-  /**
-   * Render a form to update an existing rafflelockednumber.
-   * GET rafflelockednumbers/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy ({ params }) {
+    const lockedNumber = LockedNumber.findOrFail(params.id)
 
-  /**
-   * Update rafflelockednumber details.
-   * PUT or PATCH rafflelockednumbers/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a rafflelockednumber with id.
-   * DELETE rafflelockednumbers/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    await lockedNumber.delete()
   }
 }
 

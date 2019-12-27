@@ -15,7 +15,7 @@ class RaffleLockedNumberSchema extends Schema {
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
-        .integer('owner_id')
+        .integer('user_id')
         .unsigned()
         .references('id')
         .inTable('users')

@@ -1,92 +1,50 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Raffle = use('App/Models/Raffle')
 
-/**
- * Resourceful controller for interacting with raffles
- */
 class RaffleController {
-  /**
-   * Show a list of all raffles.
-   * GET raffles
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
+
   async index ({ request, response, view }) {
+    const raffles = await Raffle.query()
+      .with('user')
+      .with('raffle_locked_numbers')
+      .fetch()
+
+    return raffles
   }
 
-  /**
-   * Render a form to be used for creating a new raffle.
-   * GET raffles/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store ({ request, response, auth }) {
+    const data = request.only(['title', 'title_reduced', 'description', 'value', 'quantity'])
+
+    const raffle = await Raffle.create({ ...data, user_id: auth.user.id })
+
+    return raffle
   }
 
-  /**
-   * Create/save a new raffle.
-   * POST raffles
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async show ({ params }) {
+    const raffle = await Raffle.findOrFail(params.id)
+
+    await raffle.load('raffle_locked_numbers')
+    await raffle.load('user')
+
+    return raffle;
   }
 
-  /**
-   * Display a single raffle.
-   * GET raffles/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update ({ params, request }) {
+    const raffle = await Raffle.findOrFail(params.id)
+    const data = request.only(['title', 'title_reduced', 'description', 'value', 'quantity'])
+
+    raffle.merge(data)
+
+    await raffle.save()
+
+    return raffle
   }
 
-  /**
-   * Render a form to update an existing raffle.
-   * GET raffles/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy ({ params }) {
+    const raffle = await Raffle.findOrFail(params.id)
 
-  /**
-   * Update raffle details.
-   * PUT or PATCH raffles/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a raffle with id.
-   * DELETE raffles/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    await raffle.delete()
   }
 }
 

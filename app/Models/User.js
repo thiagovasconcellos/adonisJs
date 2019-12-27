@@ -18,6 +18,14 @@ class User extends Model {
   tokens () {
     return this.hasMany('App/Models/Token')
   }
+
+  raffles () {
+    return this.hasMany('App/Models/Raffle')
+  }
+
+  raffles_locked_numbers () {
+    return this.hasMany('App/Models/RaffleLockedNumber')
+  }
 }
 
 module.exports = User
