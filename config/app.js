@@ -150,30 +150,9 @@ module.exports = {
   },
 
   locales: {
-    /*
-    |--------------------------------------------------------------------------
-    | Loader
-    |--------------------------------------------------------------------------
-    |
-    | The loader to be used for fetching and updating locales. Below is the
-    | list of available options.
-    |
-    | file, database
-    |
-    */
-    loader: 'file',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Default Locale
-    |--------------------------------------------------------------------------
-    |
-    | Default locale to be used by Antl provider. You can always switch drivers
-    | in runtime or use the official Antl middleware to detect the driver
-    | based on HTTP headers/query string.
-    |
-    */
-    locale: 'en'
+    loader: 'file',
+    locale: 'pt'
   },
 
   logger: {

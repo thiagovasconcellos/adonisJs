@@ -4,17 +4,18 @@ const Raffle = use('App/Models/Raffle')
 
 class RaffleController {
 
-  async index ({ request, response, view }) {
+  async index ({ request }) {
+    const { page } = request.get()
     const raffles = await Raffle.query()
       .with('user')
       .with('raffle_locked_numbers')
-      .fetch()
+      .paginate(page)
 
     return raffles
   }
 
   async store ({ request, response, auth }) {
-    const data = request.only(['title', 'title_reduced', 'description', 'value', 'quantity'])
+    const data = request.only(['title', 'title_reduced', 'description', 'value', 'quantity', 'file_id'])
 
     const raffle = await Raffle.create({ ...data, user_id: auth.user.id })
 

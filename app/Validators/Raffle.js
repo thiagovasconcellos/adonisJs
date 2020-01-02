@@ -2,15 +2,17 @@
 
 const Antl = use('Antl')
 
-class User {
+class Raffle {
   get validateAll () {
     return true
   }
+
   get rules () {
     return {
-      username: 'required|unique:users',
-      email: 'required|email|unique:users',
-      password: 'required|confirmed'
+      title: 'required',
+      title_reduced: 'required',
+      value: 'required|number',
+      quantity: "required|number"
     }
   }
 
@@ -19,4 +21,4 @@ class User {
   }
 }
 
-module.exports = User
+module.exports = Raffle
