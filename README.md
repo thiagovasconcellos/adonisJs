@@ -1,28 +1,24 @@
-# Adonis API application
+# Raffle API - using AdonisJS structure
 
-This is the boilerplate for creating an API server in AdonisJs, it comes pre-configured with.
+## Getting started
 
-1. Bodyparser
-2. Authentication
-3. CORS
-4. Lucid ORM
-5. Migrations and seeds
+In order to try things out, you should download this project and start the server on your machine by tiping ```adonis serve --dev```
 
-## Setup
+Set the variables and database (I suggest you to use Docker) and you're good to go.
 
-Use the adonis command to install the blueprint
+The features are:
+  * Create a new user using the route ```/users```
+  * Create a new session by providing a valid username / password on route ```/sessions```
+  * Create a new raffle using the route ```/raffles```
+  * Buy raffle numbers using the route ```/raffles/lockednumbers```
 
-```bash
-adonis new yardstick --api-only
-```
+## Built with
 
-or manually clone the repo and then run `npm install`.
+* [AdonisJS](https://adonisjs.com/) - AdonisJs is a Node.js web framework with a breath of fresh air and drizzle of elegant syntax on top of it. We prefer developer joy and stability over anything else.
+* [youch](https://github.com/poppinss/youch#readme) - Youch is inspired by Whoops but with a modern design. Reading stack trace of the console slows you down from active development. Instead Youch print those errors in structured HTML to the browser.
+* [sentry](https://sentry.io/) - Open-source and hosted error monitoring that helps software teams discover, triage, and prioritize errors in real-time.
 
 
-### Migrations
+## Authors
 
-Run the following command to run startup migrations.
-
-```js
-adonis migration:run
-```
+* **Thiago Vasconcellos**
